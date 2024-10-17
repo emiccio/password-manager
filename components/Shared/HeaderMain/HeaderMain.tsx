@@ -38,7 +38,7 @@ export function HeaderMain() {
     <div className="flex justify-between items-center">
       <h1 className="text-xl md:text-3xl font-semibold">Todas las cajas fuertes</h1>
       <Dialog open={ openDialog } onOpenChange={ setOpenDialog }>
-        <DropdownMenu open={ openDropdown} onOpenChange={ setOpenDropdown }>
+        <DropdownMenu open={ openDropdown } onOpenChange={ setOpenDropdown }>
           <DropdownMenuTrigger asChild>
             <Button>
               Nueva <ChevronDown />
