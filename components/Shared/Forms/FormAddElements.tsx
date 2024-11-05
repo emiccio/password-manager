@@ -18,9 +18,13 @@ import { Input } from "@/components/ui/input"
 import { formSchema } from "./FormAddElements.form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Copy, Earth, Eye, Shuffle } from "lucide-react"
+import { copyClipboard } from "@/lib/copyClipboard"
+import { useState } from "react"
  
 
 export function FormAddElements() {
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,11 +48,15 @@ export function FormAddElements() {
     console.log(values)
   }
 
+  const updateUrl = () => {
+    form.setValue("urlWebsite", window.location.href);
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="md:grid-cols-2 gap-y-2 gap-x-4 grid">
         <FormField
-          control={form.control}
+          control={ form.control}
           name="typeElement"
           render={({ field }) => (
             <FormItem>
@@ -70,7 +78,7 @@ export function FormAddElements() {
           )}
         />
         <FormField
-          control={form.control}
+          control={ form.control }
           name="isFavourite"
           render={({ field }) => (
             <FormItem>
@@ -95,6 +103,106 @@ export function FormAddElements() {
               <FormLabel>Nombre</FormLabel>
               <FormControl>
                 <Input { ...field } />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={ form.control }
+          name="directory"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Direectorio</FormLabel>
+              <Select onValueChange={ field.onChange } defaultValue={ field.value }>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder={'Elige un directorio'} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value={"Social"}>Social</SelectItem>
+                  <SelectItem value={"Arts"}>Arts</SelectItem>
+                  <SelectItem value={"Shopping"}>Shopping</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField 
+          control={ form.control }
+          name="username"
+          render={ ({ field }) => (
+            <FormItem>
+              <FormLabel>Usuario</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input { ...field } />
+                  <Copy className="absolute top-3 right-4 cursor-pointer" 
+                    size={18}
+                    onClick={() => {
+                      copyClipboard(field.value)
+                    }}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField 
+          control={ form.control }
+          name="urlWebsite"
+          render={ ({ field }) => (
+            <FormItem>
+              <FormLabel>URL website</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input { ...field } />
+                  <Earth 
+                    className="absolute top-3 right-4 cursor-pointer" 
+                    size={18} 
+                    onClick={updateUrl}
+                  />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField 
+          control={ form.control }
+          name="password"
+          render={ ({ field }) => (
+            <FormItem>
+              <FormLabel className="flex justify-between">
+                Password
+                <Shuffle 
+                  className="cursor-pointer" 
+                  size={15} 
+                  onClick={() => {
+                    console.log('generate password')
+                  }}
+                />
+              </FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input { ...field } type={ showPassword ? "text" : "password" } />
+                  <Eye 
+                    className="absolute top-3 right-12 cursor-pointer" 
+                    size={18} 
+                    onClick={() => {
+                      setShowPassword(!showPassword)
+                    }}
+                  />
+                  <Copy className="absolute top-3 right-4 cursor-pointer" 
+                    size={18}
+                    onClick={() => {
+                      copyClipboard(field.value)
+                    }}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
